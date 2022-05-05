@@ -1,15 +1,72 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+a {
+  text-decoration: none;
+}
 
-.container {
-  /* max-width: min-content; */
-  margin: 0 auto;
+input {
+  padding: 0.9rem;
+}
+
+button {
+  cursor: pointer;
+  outline: 0;
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  border: 1px solid transparent;
+  padding: 6px 12px;
+  font-size: 16px;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+button:hover {
+  color: #fff;
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}
+
+figure {
+  overflow: hidden;
+}
+
+.loading {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.loading h3 {
+  justify-self: center;
+  align-self: center;
+}
+
+.article-card {
+  max-height: min-content;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  padding-bottom: 1.5rem;
+  text-align: center;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.article-card:hover {
+  background-color: gainsboro;
+}
+
+/* optional custom container and grid */
+/* 
+ .customContainer { 
+ margin: 0 auto;
   display: grid;
   place-items: center;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: auto;
-}
+  grid-template-rows: auto; 
+ } 
 
 .col-1 {
   grid-column-start: span 1;
@@ -71,10 +128,4 @@
   grid-column-end: span 12;
 }
 
-.bigger-font-size {
-  font-size: 3rem;
-}
-
-.normal-font-size {
-  font-size: 2rem;
-}
+*/

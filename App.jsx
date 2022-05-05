@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
-import './App.css';
+import Grid from '@mui/material/Grid';
+import Container from '@mui/material/Container';
 import SingleArticle from './components/SingleArticle';
+import './App.css';
 
 const apiUrl =
   'https://storage.googleapis.com/aller-structure-task/test_data.json';
 
 function App() {
+  const [loading, setLoading] = useState(true);
   const [newsData, setNewsData] = useState([]);
   const [title, setTitle] = useState('');
   const [tempElementId, setTempElementId] = useState('');
@@ -13,21 +16,25 @@ function App() {
   const fetchData = async () => {
     const res = await fetch(apiUrl);
     const data = await res.json();
-    if (data) setNewsData(data);
+    if (data) {
+      setNewsData(data);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
+    setLoading(true);
     fetchData();
   }, []);
 
+  const save = 'Save';
+  const edit = 'Edit';
+
   const handleEdit = (e, rowIndex, articleIndex) => {
-    console.log(e);
-    console.log(title);
     setTempElementId(`${rowIndex}-${articleIndex}`);
-    if (e.target.innerText === 'Save') {
-      // set proper error if title is empty
+    if (e.target.innerText === save) {
       if (title.length === 0) {
-        e.target.innerText = 'Edit';
+        alert('Please set title');
         return;
       }
       const newsDataTemp = [...newsData];
@@ -35,45 +42,51 @@ function App() {
       setNewsData(newsDataTemp);
       setTitle('');
       setTempElementId('');
-      e.target.innerText = 'Edit';
+      e.target.innerText = edit;
     } else {
-      e.target.innerText = 'Save';
+      e.target.innerText = save;
     }
   };
 
   const changeTitle = (e) => {
-    const newTitle = e.target.value;
-    setTitle(newTitle);
+    setTitle(e.target.value);
   };
 
-  if (newsData) console.log(newsData);
-
   return (
-    <div className="container">
-      {newsData &&
-        newsData.map((rootItem) => {
-          return rootItem.map((row, rowIndex) => {
-            return row.columns.map((article, articleIndex) => {
-              const { title, url, imageUrl, width } = article;
+    <Container maxWidth="lg" justifyContent="center" alignItems="center">
+      <Grid container spacing={2} justifyContent="center" alignItems="center">
+        {newsData && loading === false ? (
+          newsData.map((rootItem) => {
+            return rootItem.map((row, rowIndex) => {
+              return row.columns.map((article, articleIndex) => {
+                const { title, url, imageUrl, width } = article;
 
-              // Props to pass to a SingleArticle component
-              const props = {
-                tempElementId,
-                imageUrl,
-                url,
-                title,
-                width,
-                rowIndex,
-                articleIndex,
-                changeTitle,
-                handleEdit,
-              };
+                // Props to pass to a SingleArticle component
+                const articleProps = {
+                  tempElementId,
+                  imageUrl,
+                  url,
+                  title,
+                  width,
+                  rowIndex,
+                  articleIndex,
+                  changeTitle,
+                  handleEdit,
+                  save,
+                  edit,
+                };
 
-              return <SingleArticle {...props} />;
+                return <SingleArticle {...articleProps} />;
+              });
             });
-          });
-        })}
-    </div>
+          })
+        ) : (
+          <div className="loading">
+            <h3>Loading...</h3>
+          </div>
+        )}
+      </Grid>
+    </Container>
   );
 }
 

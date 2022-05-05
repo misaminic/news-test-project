@@ -1,4 +1,7 @@
 import React from 'react';
+import Grid from '@mui/material/Grid';
+import ArticleImage from './ArticleImage';
+import Button from './Button';
 
 const SingleArticle = ({
   tempElementId,
@@ -10,52 +13,41 @@ const SingleArticle = ({
   articleIndex,
   changeTitle,
   handleEdit,
+  save,
+  edit,
 }) => {
-  return (
-    <article key={articleIndex} className={`col-${width} `}>
-      {tempElementId === `${rowIndex}-${articleIndex}` ? (
-        <>
-          <form className="form-control">
-            <input
-              type="text"
-              placeholder="Set title"
-              onChange={(e) => changeTitle(e)}
-            />
-          </form>
-          <figure>
-            <picture>
-              <img
-                src={`${imageUrl}${width < 5 ? '&height=300' : '&height=300'}`}
-                alt="description"
-              />
-            </picture>
-          </figure>
-        </>
-      ) : (
-        <>
-          <a href={`${url}`} target="_blank" rel="noreferrer">
-            <h3>{title}</h3>
-            <figure>
-              <picture>
-                <img
-                  src={`${imageUrl}${
-                    width < 5 ? '&height=300' : '&height=300'
-                  }`}
-                  alt="description"
-                />
-              </picture>
-            </figure>
-          </a>
-        </>
-      )}
+  const titleCharacterLimit = 25;
+  const buttonProps = { rowIndex, articleIndex, handleEdit, save, edit };
 
-      <button
-        id={`${rowIndex}-${articleIndex}`}
-        onClick={(e) => handleEdit(e, rowIndex, articleIndex)}
-      >
-        Edit
-      </button>
-    </article>
+  return (
+    <Grid key={articleIndex} item lg={width} md={12} sm={12} xs={12}>
+      <article className={'article-card'}>
+        {tempElementId === `${rowIndex}-${articleIndex}` ? (
+          <>
+            <form className="form-control">
+              <input
+                type="text"
+                placeholder="Set title"
+                onChange={(e) => changeTitle(e)}
+              />
+            </form>
+            <ArticleImage imageUrl={imageUrl} />
+          </>
+        ) : (
+          <>
+            <a href={`${url}`} target="_blank" rel="noreferrer">
+              <h3>
+                {title.length > titleCharacterLimit
+                  ? title.slice(0, 25) + '...'
+                  : title}
+              </h3>
+              <ArticleImage imageUrl={imageUrl} />
+            </a>
+          </>
+        )}
+        <Button {...buttonProps} />
+      </article>
+    </Grid>
   );
 };
 
